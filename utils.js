@@ -83,9 +83,31 @@ function decryptXORSingleChar(encryptedBytes) {
     return {decrypted: mostLikely, key: key};
 }
 
+function pad(input, bytelength) {
+    let bytes = Buffer.from(input);
+    let missing = bytelength - bytes.length;
+    if (missing < 0) {
+        throw new Error("Input longer than bytelength");
+    }
+    let toInsert = Buffer.alloc(missing).fill(0x04);
+    return Buffer.concat([bytes, toInsert]);
+}
+
+function padPlain(input, bytelength) {
+    let missing = bytelength - input.length;
+    if (missing < 0) {
+        throw new Error("Input longer than bytelength");
+    }
+    let toInsert = "\x04".repeat(missing);
+    return input + toInsert;
+}
+
 module.exports = {hexToBase64: hexToBase64,
                   xor: xor,
                   decryptXORSingleChar: decryptXORSingleChar,
                   XORRepeatingKey: XORRepeatingKey,
                   scoreLikelihood: scoreLikelihood,
-                  hammingDistance: hammingDistance}
+                  hammingDistance: hammingDistance,
+                  pad: pad,
+                  padPlain: padPlain
+                }
