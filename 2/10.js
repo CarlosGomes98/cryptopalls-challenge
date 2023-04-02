@@ -67,16 +67,20 @@ function decryptCBC128(input, key, iv) {
 
 // sanity check
 
-let test = "Never gonna give you up, never gonna let you down";
-console.log("Sanity check for encryption")
-console.log(`Before: ${test}`);
-let enc = encryptCBC128(Buffer.from(test), key, Buffer.alloc(16, 0));
-console.log(`Encrypted: ${enc}`);
-let dec = decryptCBC128(enc, key, Buffer.alloc(16, 0));
-console.log(`Recovered: ${dec.toString()}`);
+if (require.main === module) {
+    let test = "Never gonna give you up, never gonna let you down";
+    console.log("Sanity check for encryption")
+    console.log(`Before: ${test}`);
+    let enc = encryptCBC128(Buffer.from(test), key, Buffer.alloc(16, 0));
+    console.log(`Encrypted: ${enc}`);
+    let dec = decryptCBC128(enc, key, Buffer.alloc(16, 0));
+    console.log(`Recovered: ${dec.toString()}`);
 
 
-console.log("Now the real test")
-let data = fs.readFileSync('2/10.txt').toString().split("\n").join('');
-let decrypted = decryptCBC128(Buffer.from(data, 'base64'), key, Buffer.alloc(16, 0)).toString();
-console.log(decrypted)
+    console.log("Now the real test")
+    let data = fs.readFileSync('2/10.txt').toString().split("\n").join('');
+    let decrypted = decryptCBC128(Buffer.from(data, 'base64'), key, Buffer.alloc(16, 0)).toString();
+    console.log(decrypted)
+}
+
+module.exports = { encryptCBC128, decryptCBC128 }
